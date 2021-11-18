@@ -3,14 +3,28 @@ import React from "react";
 function Sort(props){
     const [visibale, visibaleSet] = React.useState(false);
     const [selectIndex, setSelectIndex]= React.useState(0);
+    const sortRef = React.useRef(null);
+
 
     function changeSelectIndex(id){
         visibaleSet(!visibale);
         setSelectIndex(id)
     }
 
+    function clickOutSide(e){
+      if (!e.path.includes(sortRef.current)){
+        visibaleSet(false)
+      }
+    }
+
+    React.useEffect(()=>{
+      document.body.addEventListener('click', (e)=>{
+        clickOutSide(e)
+      })
+    }, [])
+
     return(
-        <div className="sort">
+        <div ref={sortRef} className="sort" >
         <div className="sort__label">
           <svg
             width="10"
