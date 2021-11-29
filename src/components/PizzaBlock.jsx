@@ -2,6 +2,7 @@
 
 import React from "react";
 import classNames from "classnames";
+import PropTypes from 'prop-types';
 
 function PizzaBlock(props){
     const [sizePizza, setSizePizza] = React.useState(0);
@@ -55,5 +56,18 @@ function PizzaBlock(props){
         </div>
     )
 }
+
+PizzaBlock.propTypes ={
+  name: PropTypes.string.isRequired,
+  imageUrl: PropTypes.string.isRequired,
+  sizes: PropTypes.array.isRequired,
+  types:PropTypes.array.isRequired
+}
+
+
+PizzaBlock.defaultProps = {
+  sizes: [1,2,3]
+}
+
 
 export default PizzaBlock;

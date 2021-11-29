@@ -39,16 +39,16 @@ function Sort(props){
             />
           </svg>
           <b>Сортировка по:</b>
-          <span onClick={()=>visibaleSet(!visibale)}>{props.item[selectIndex]}</span>
+          <span onClick={()=>visibaleSet(!visibale)}>{props.item[selectIndex].name}</span>
         </div>
         {visibale && <div className="sort__popup">
           <ul>
             {props.item && props.item.map((name,id)=>(
                 <li 
-                 key={`${name}_${id}`}
+                 key={`${name.type}_${id}`}
                  className={selectIndex === id ? 'active': ''}
                  onClick={()=>changeSelectIndex(id)}
-                 >{name}</li>
+                 >{name.name}</li>
             ))}
           </ul> 
         </div>}
