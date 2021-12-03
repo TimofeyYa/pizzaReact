@@ -4,3 +4,10 @@ export const setPizzas = (items) =>(
         payload: items
     }
 )
+
+export const setLoad = (items) =>(
+    {
+        type: 'SET_LOAD',
+        payload: items
+    }
+)

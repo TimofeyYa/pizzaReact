@@ -1,16 +1,18 @@
 import React from "react";
+import PropTypes from 'prop-types'
 
-function Sort(props){
+const Sort = React.memo(function Sort(props){
     const [visibale, visibaleSet] = React.useState(false);
     const [selectIndex, setSelectIndex]= React.useState(0);
     const sortRef = React.useRef(null);
 
 
-    function changeSelectIndex(id){
+    function changeSelectIndex(id,name){
         visibaleSet(!visibale);
         setSelectIndex(id)
+        props.onClick(name)
     }
-
+   
     function clickOutSide(e){
       if (!e.path.includes(sortRef.current)){
         visibaleSet(false)
@@ -47,13 +49,23 @@ function Sort(props){
                 <li 
                  key={`${name.type}_${id}`}
                  className={selectIndex === id ? 'active': ''}
-                 onClick={()=>changeSelectIndex(id)}
+                 onClick={()=>changeSelectIndex(id, name.type)}
                  >{name.name}</li>
             ))}
           </ul> 
         </div>}
       </div>
     )
+})
+
+Sort.propTypes = {
+  item: PropTypes.array.isRequired
+}
+
+Sort.defaultProps = {
+  item:  [{name:'популярности', type: 'rating'},
+  {name:"цене", type:"price"},
+  {name:"алфавиту", type:'name'}]
 }
 
 export default Sort;

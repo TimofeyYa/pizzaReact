@@ -10,6 +10,12 @@ const pizzas = (state = inisialState,action) =>{
             items: action.payload
         }
     }
+    if(action.type === 'SET_LOAD'){
+        return {
+            ...state,
+            isLoaded: action.payload
+        }
+    }
 
     return state;
 }

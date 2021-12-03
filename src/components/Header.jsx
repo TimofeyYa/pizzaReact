@@ -3,9 +3,11 @@ import React from 'react';
 import logoSvg from '../assets/img/pizza-logo.svg';
 import { Link } from 'react-router-dom';
 import {Button} from './index';
- 
+
+
+
  function Header(){
-   
+  
 
      return (
         <div className="header">
@@ -60,6 +62,8 @@ import {Button} from './index';
         </div>
       </div>
      )
- }
+    }
+  
+ 
 
  export default Header;

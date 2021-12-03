@@ -7,29 +7,40 @@ import { Routes, Route } from 'react-router-dom';
 import {Header} from './components';
 import {Main,Cart} from "./pages";
 
-import { setPizzas } from './redux/actions/pizzas';
+import { setPizzas, setLoad } from './redux/actions/pizzas';
 import store from './redux/store'
-import {connect} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 
 store.subscribe(()=> console.log(store.getState()));
 
-function App(props) {
+function App() {
 
+  const dispatch = useDispatch();
+  const storeSelector = useSelector(({filterRed, pizzasRed}) => {
+    return{
+      sortBy:filterRed.sortBy,
+      category: filterRed.category
+    };
+  });
 
+  console.log("Sort - ", storeSelector.category);
   React.useEffect(() => {
-    fetch('http://localhost:3000/db.json').then((resp) => resp.json()).
+    dispatch(setLoad(true));
+    let url = `http://localhost:3001/pizzas?category=${storeSelector.category}&_sort=${storeSelector.sortBy}`;
+        if(storeSelector.category == 0) url = `http://localhost:3001/pizzas?_sort=${storeSelector.sortBy}`;
+    fetch(url).then((resp) => resp.json()).
     then((json)=>{
-      store.dispatch(setPizzas(json.pizzas));
-      
+      dispatch(setPizzas(json));
+      dispatch(setLoad(false));
     })
-  }, [])
+  }, [storeSelector.category, storeSelector.sortBy])
 
   return (
     <div className="wrapper">
       <Header />
       <div className="content">
         <Routes>
-          <Route exact path="/" element={<Main items={props.items}/>}/>
+          <Route exact path="/" element={<Main/>}/>
           <Route exact path="/cart" element={<Cart/>}/>
         </Routes>
       </div>
@@ -38,10 +49,5 @@ function App(props) {
   )
 }
 
-const mapStateToProps = (state) =>{
-  return {
-    items: state.pizzasRed.items
-  }
-}
 
-export default connect(mapStateToProps)(App);
+export default App;

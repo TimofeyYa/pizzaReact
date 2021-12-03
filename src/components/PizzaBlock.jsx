@@ -3,6 +3,9 @@
 import React from "react";
 import classNames from "classnames";
 import PropTypes from 'prop-types';
+import {useSelector} from 'react-redux';
+
+import ContentLoader from "react-content-loader"
 
 function PizzaBlock(props){
     const [sizePizza, setSizePizza] = React.useState(0);
@@ -11,7 +14,37 @@ function PizzaBlock(props){
     function setPizzaFunc(index){
       setSizePizza(index);
     }
-    console.log(props.types.includes(1));
+    const storeData = useSelector(({pizzasRed}) => {
+      return {
+        load: pizzasRed.isLoaded
+      };
+    })
+ 
+    console.log(storeData.load);
+
+    if (storeData.load){
+      return(
+        <ContentLoader 
+        speed={2}
+        width={280}
+        height={456}
+        viewBox="0 0 280 456"
+        backgroundColor="#f3f3f3"
+        foregroundColor="#ecebeb"
+  
+      >
+        <circle cx="135" cy="155" r="135" /> 
+        <rect x="0" y="301" rx="0" ry="0" width="280" height="34" /> 
+        <rect x="0" y="347" rx="0" ry="0" width="280" height="75" /> 
+        <rect x="0" y="435" rx="0" ry="0" width="49" height="40" />
+      </ContentLoader>
+      
+    
+      )
+    }
+    if (!storeData.load){
+
+    
     return(
         <div className="pizza-block">
         <img
@@ -55,6 +88,7 @@ function PizzaBlock(props){
         </div>
         </div>
     )
+}
 }
 
 PizzaBlock.propTypes ={
