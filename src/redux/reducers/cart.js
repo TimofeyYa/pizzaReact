@@ -1,17 +1,24 @@
 const inisialState = {
-    category: 0,
-    sortBy: 'popular'
+    items:[],
+    sum: 0,
+    count: 0
 }
 
-const filters = (state = inisialState,action) =>{
-    if(action.type === 'SET_SORT_BY'){
+const cartRed = (state =inisialState, action) =>{
+    switch (action.type){
+        case 'ADD_PIZZAS':{
+            console.log(state.items)
+            const arr = state.items;
+            arr.push(action.payload);
+            console.log(arr)
         return {
             ...state,
-            sortBy: action.payload
+            items: arr
         }
-    }
+        }
 
-    return state;
+        default: return state
+    }
 }
 
-export default filters;
+export default cartRed;

@@ -3,16 +3,22 @@
 import React from "react";
 import classNames from "classnames";
 import PropTypes from 'prop-types';
-import {useSelector} from 'react-redux';
+import {useSelector,useDispatch} from 'react-redux';
 
 import ContentLoader from "react-content-loader"
+import {addPizza} from '../redux/actions/cart';
+
 
 function PizzaBlock(props){
+    const dispatch = useDispatch();
+    let [countPizz, setCountPizz] = React.useState(0);
+
     const [sizePizza, setSizePizza] = React.useState(0);
     const [activeTypes, setActiveTypes] = React.useState(props.types[0]);
 
     function setPizzaFunc(index){
       setSizePizza(index);
+      
     }
     const storeData = useSelector(({pizzasRed}) => {
       return {
@@ -20,7 +26,10 @@ function PizzaBlock(props){
       };
     })
  
-    console.log(storeData.load);
+    function addPizzaFanc(){
+      setCountPizz(++countPizz);
+       dispatch(addPizza([props.id,props.name, props.imageUrl, props.price]))
+    }
 
     if (storeData.load){
       return(
@@ -63,7 +72,7 @@ function PizzaBlock(props){
               props.sizes.map((item, index) => <li 
                key={`pizzaSize__${index}`}
                className={index === sizePizza ? 'active' : ''}
-               onClick = {() => setSizePizza(index)}>{item} см</li>)
+               onClick = {() => setPizzaFunc(index)}>{item} см</li>)
             }
           </ul>
         </div>
@@ -82,8 +91,8 @@ function PizzaBlock(props){
                 fill="white"
               />
             </svg>
-            <span>Добавить</span>
-            <i>2</i>
+            <span onClick={()=> addPizzaFanc()}>Добавить</span>
+            <i>{countPizz}</i>
           </div>
         </div>
         </div>
