@@ -1,12 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { CartItem } from '../components/index';
-import { useSelector} from 'react-redux'
-import cartRed from "../redux/reducers/cart";
+import { useSelector, useDispatch} from 'react-redux'
+import {clearPizzas} from '../redux/actions/cart';
+
 
 function Cart() {
-
-  const DB = useSelector(({cartRed}) => cartRed.items);
+  const dispatch = useDispatch();
+  const DB = useSelector(({cartRed}) => {return {items:cartRed.items, sum:cartRed.sum, count: cartRed.count}});
 
   return (
     <div className="container container--cart">
@@ -26,17 +27,25 @@ function Cart() {
               <path d="M11.6666 9.16667V14.1667" stroke="#B6B6B6" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
 
-            <span>Очистить корзину</span>
+            <span onClick={()=>dispatch(clearPizzas())}>Очистить корзину</span>
           </div>
         </div>
         <div className="content__items">
-          {DB && DB.map(item=> <CartItem key={item.id} cont={item} />)}
+          {DB.items && DB.items.map(item=> {
+            console.log(item.count, 'Колличество');
+            if (item.count > 0){
+              return (
+              <CartItem key={item.id} cont={item} />
+              )
+            }
+            
+          } )}
           
         </div>
         <div className="cart__bottom">
           <div className="cart__bottom-details">
-            <span> Всего пицц: <b>{DB.length}</b> </span>
-            <span> Сумма заказа: <b>900 ₽</b> </span>
+            <span> Всего пицц: <b>{DB.count}</b> </span>
+            <span> Сумма заказа: <b>{DB.sum} ₽</b> </span>
           </div>
           <div className="cart__bottom-buttons">
             <Link to="/" className="button button--outline button--add go-back-btn">

@@ -10,6 +10,7 @@ import {Main,Cart} from "./pages";
 import { setPizzas, setLoad } from './redux/actions/pizzas';
 import store from './redux/store'
 import {useDispatch, useSelector} from 'react-redux'
+import {addAll} from './redux/actions/cart'
 
 store.subscribe(()=> console.log(store.getState()));
 
@@ -19,9 +20,15 @@ function App() {
   const storeSelector = useSelector(({filterRed, pizzasRed}) => {
     return{
       sortBy:filterRed.sortBy,
-      category: filterRed.category
+      category: filterRed.category,
+      cartRed:pizzasRed.items
     };
   });
+  let flag = 0;
+  React.useEffect(()=>{
+      flag = 1;
+  }, []);
+ 
 
   console.log("Sort - ", storeSelector.category);
   React.useEffect(() => {
@@ -32,8 +39,14 @@ function App() {
     then((json)=>{
       dispatch(setPizzas(json));
       dispatch(setLoad(false));
+      if (flag){
+        dispatch(addAll(json));
+        flag = 0;
+      }
     })
   }, [storeSelector.category, storeSelector.sortBy])
+
+
 
   return (
     <div className="wrapper">

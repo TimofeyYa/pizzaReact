@@ -11,7 +11,22 @@ import {addPizza} from '../redux/actions/cart';
 
 function PizzaBlock(props){
     const dispatch = useDispatch();
-    let [countPizz, setCountPizz] = React.useState(0);
+
+    const storeData = useSelector(({pizzasRed, cartRed}) => {
+      return {
+        load: pizzasRed.isLoaded,
+        count: cartRed.items
+      };
+    })
+    let count;
+
+    if (storeData.count[props.id]){
+      count = storeData.count[props.id].count;
+    } else {
+      count = 0;
+    }
+
+    let [countPizz, setCountPizz] = React.useState(count);
 
     const [sizePizza, setSizePizza] = React.useState(0);
     const [activeTypes, setActiveTypes] = React.useState(props.types[0]);
@@ -20,17 +35,13 @@ function PizzaBlock(props){
       setSizePizza(index);
       
     }
-    const storeData = useSelector(({pizzasRed}) => {
-      return {
-        load: pizzasRed.isLoaded
-      };
-    })
+
  
     function addPizzaFanc(){
       setCountPizz(++countPizz);
-       dispatch(addPizza([props.id,props.name, props.imageUrl, props.price]))
+       dispatch(addPizza(props.id))
     }
-
+    
     if (storeData.load){
       return(
         <ContentLoader 
